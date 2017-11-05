@@ -28,6 +28,8 @@ nmap <leader>gf :<C-u>execute ':CtrlP '.g:shs_project_dir<cr><C-d><C-\>f
 " inoremap <silent> <Esc>[7~ <Esc>^i
 " inoremap <silent> <Esc>[8~ <Esc>$a
 
+source ~/.vim/mod/fzf.vim
+
 let g:ctrlp_regexp = 1
 let g:ctrlp_by_filename = 1
 "let g:ctrlp_custom_ignore = {
@@ -37,10 +39,12 @@ let g:ctrlp_by_filename = 1
 " \ }
 if executable('rg')
 	" ripgrep
+	set grepprg=rg\ --color=never
 	let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
 	let g:ctrlp_use_caching = 0
 elseif executable('ag')
 	" the silver searcher
+	set grepprg=ag\ --nogroup\ --nocolor
 	let g:ctrlp_user_command = 'ag %s -i --nocolor --nogroup --hidden
 	\ --ignore ".git"
 	\ --ignore ".svn"

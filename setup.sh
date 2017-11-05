@@ -9,7 +9,8 @@ VIM_PLUGINS="\
 	bling/vim-airline \
 	ctrlpvim/ctrlp.vim \
 	rust-lang/rust.vim \
-	vim-syntastic/syntastic
+	vim-syntastic/syntastic \
+	junegunn/fzf.vim \
 	"
 
 # Git repo helper (clone or update a repository)
@@ -89,16 +90,16 @@ fi
 
 OS=`uname -s`
 REQUIRED_PACKAGES_OpenBSD="\
-	git vim zsh ripgrep colorls \
+	git vim zsh ripgrep colorls ectags \
 	"
 RECOMMENDED_PACKAGES_OpenBSD="\
-	ectags gnupg-2 gpgme mutt isync procmail abook urlview lynx \
+	gnupg-2 gpgme mutt isync procmail abook urlview lynx \
 "
 REQUIRED_PACKAGES_FreeBSD="\
-	git vim tmux zsh \
+	git vim tmux zsh ctags \
 	"
 RECOMMENDED_PACKAGES_FreeBSD="\
-	ctags gnupg neomutt isync procmail abook urlview lynx ripgrep \
+	gnupg neomutt isync procmail abook urlview lynx ripgrep \
 	"
 . "$SCRIPT_HOME/include/packages.sh"
 check_packages
@@ -113,9 +114,8 @@ else
 	echo "-> git is ok, good."
 fi
 echo "-> Checking tmux..."
-which tmux
-if [ $? -ne 0 ]; then
-	echo "*** tmux version 2.x is needed."
+if !which tmux; then
+	echo "*** ERROR: tmux is needed."
 	exit 1
 fi
 echo "-> tmux is ok, good."
@@ -152,6 +152,16 @@ if [ $MUTT_IS_OK -ne 1 ]; then
 	echo "*** WARNING: mutt check failed."
 else
 	echo "-> mutt is ok, good."
+fi
+
+echo "-> Checking exuberant ctags..."
+if !which exctags; then
+	echo "*** ERROR: exctags not found, if it is installed using an "
+	echo "		 alternate name, create the softlink ~/bin/exctags"
+	echo "		 to point to this binary."
+	exit 1
+else
+	echo "-> exctags is ok, good."
 fi
 
 cd $HOME
